@@ -1,54 +1,58 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrateur
- * Date: 27/07/2017
- * Time: 09:43
- */
-$pdo = getPDO();
-$errors = [];
-$email="icepjohn@hotmail.com";
-/* recupération de la valeur de newletter */
-$sql =$pdo->prepare( "select newsletter from users WHERE email=:email");
-$sql->bindParam(':email', $email);
-try {
-    $sql->execute();
-    $rs = $sql->fetch(PDO::FETCH_ASSOC);
-    if (!$rs) {
-        $errors[] = "L'utilisateur n'existe pas dans la base de données";
-    } else {
-        $newsletter = $rs['newsletter'];
 
-    }
-} catch (PDOException $e) {
-    $errors[] = "Erreur de requête SQL";
+
+$connexion = getPDO();
+$id_user = $_SESSION['user']['id_user'];
+$newsletter = $_SESSION['user']['newsletter'];
+
+//Traitement du formulaire Info
+$isSubmittedInfo = filter_has_var(INPUT_POST, 'submitInfo');
+if ($isSubmittedInfo){
+    $nom = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+    $prenom = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_STRING);
+    $telephone = filter_input(INPUT_POST, 'telephone', FILTER_SANITIZE_STRING);
+
+    //Mise à jour des nouvelles informations dans la base de données
+    $sql = "UPDATE users SET nom=:nom, prenom=:prenom, telephone=:telephone WHERE id_user=:id_user";
+    $params['id_user'] = $id_user;
+    $params['nom'] = $nom;
+    $params['prenom'] = $prenom;
+    $params['telephone'] = $telephone;
+    $stm = $connexion->prepare($sql);
+    $stm->execute($params);
+
+    $_SESSION['user']['nom'] = $nom;
+    $_SESSION['user']['prenom'] = $prenom;
+    $_SESSION['user']['telephone'] = $telephone;
 }
 
 
-$isSubmitted = filter_has_var(INPUT_POST, 'submit');
-if ($isSubmitted) {
-    // on récupere la valeur de la case si elle est cochée
-    if (filter_has_var(INPUT_POST,'newsletter')){
-        $newsletter='O'; // case cochée
-    }else {
-        $newsletter='N'; // case décochée
+//Traitement du formulaire Newsletter
+$isSubmittedLetter = filter_has_var(INPUT_POST, 'submitLetter');
+
+if ($isSubmittedLetter){
+    if ($newsletter == "O"){
+        $newsletter ="N";
     }
-    //on modifie la base de données
-    $sql = $pdo->prepare('UPDATE users SET newsletter=:newsletter WHERE email=:email');
-    $sql->bindParam(':newsletter', $newsletter);
-    $sql->bindParam(':email', $email);
-    try {
-        $sql->execute();
-        $_SESSION['flash'] = ["success" => "modification de l'abonnement à la newsletter ok"];
-    } catch (PDOException $e) {
-        $errors[] = "Impossible de modifier l'abonnement";
+    else{
+        $newsletter = "O";
     }
+
+    $sql = "UPDATE users SET newsletter=:newsletter WHERE id_user=:id_user";
+    $param['id_user']=$id_user;
+    $param['newsletter'] = $newsletter;
+    $stm = $connexion->prepare($sql);
+    $stm->execute($param);
+
+    $_SESSION['user']['newsletter'] = $newsletter;
+
 }
+
+
 
 renderView(
     'userHome',
     [
-        'pageTitle' => 'User Home',
-        'newsletter'=> $newsletter,
+        'pageTitle' => 'Espace client'
     ]
 );
