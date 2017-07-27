@@ -70,6 +70,32 @@ if ($isSubmitted) {
     }
 }
 
+$isSubmittedCredit = filter_has_var(INPUT_POST, 'submitCredit');
+if ($isSubmittedCredit){
+    $email = filter_input(INPUT_POST, 'emailCredit', FILTER_SANITIZE_EMAIL);
+    $credit = $_POST['credit'];
+    if ($credit == ""){
+        $errors[] = "Vous devez choisir votre nouveau crédit";
+    }
+    if (empty($email)) {
+        $errors[] = "Vous devez saisir un email";
+    }
+    if (empty($errors)){
+        $sql = $pdo->prepare("UPDATE users SET credit=:credit WHERE email=:email");
+        $sql->bindParam(':email', $email);
+        $sql->bindParam(':credit', $credit);
+        try {
+            $sql->execute();
+        } catch (PDOException $e) {
+            $errors[] = "Erreur lors de la modification du crédit";
+        }
+
+        $_SESSION['flash'] = ["success" => "Crédit modifié"];
+        header('Location: index.php?controller=adminHome');
+        exit();
+    }
+}
+
 renderView(
     'adminHome',
     [

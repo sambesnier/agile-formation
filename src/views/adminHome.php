@@ -66,6 +66,7 @@
                                     <th>Téléphone</th>
                                     <th>Sexe</th>
                                     <th>Role</th>
+                                    <th>Crédit</th>
                                 </tr>
                                 <?php foreach ($users as $user): ?>
                                     <tr class="lines">
@@ -75,6 +76,7 @@
                                         <td><?= $user['telephone'] ?></td>
                                         <td><?= $user['sexe'] ?></td>
                                         <td><?= $user['role'] ?></td>
+                                        <td><?= $user['credit'] ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </table>
@@ -92,6 +94,17 @@
                                 </div>
                                 <input type="email" name="email" id="email-hidden" hidden>
                                 <button type="submit" name="submit" class="btn btn-primary">Modifier</button>
+                            </form>
+                        </div>
+                        <div class="col-md-4" id="credit-form">
+                            <h3 id="credit-form-title"></h3>
+                            <form method="post">
+                                <div class="form-group">
+                                    <label for="credit">Nouveau crédit</label>
+                                    <input type="number" min="0" name="credit" class="form-control">
+                                </div>
+                                <input type="email" name="emailCredit" id="emailCredit-hidden" hidden>
+                                <button type="submit" name="submitCredit" class="btn btn-primary">Modifier</button>
                             </form>
                         </div>
                     </div>
