@@ -1,5 +1,6 @@
 <?php
 
+
 $connexion = getPDO();
 $id_user = $_SESSION['user']['id_user'];
 $newsletter = $_SESSION['user']['newsletter'];
@@ -53,6 +54,5 @@ renderView(
     'userHome',
     [
         'pageTitle' => 'Espace client'
-
     ]
 );

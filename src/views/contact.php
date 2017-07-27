@@ -22,10 +22,10 @@
                 Nom:<br>
                 <input type="text" name="name" class ="form-control"><br>
                 E-mail:<br>
-                <input type="email" name="mail" class ="form-control"><br>
+                <input type="email" name="email" class ="form-control"><br>
                 Commentaire:<br>
-                <textarea name="comment" size="50" class ="form-control"></textarea><br><br>
-                <input type="submit" value="Envoyer" class ="btn">
+                <textarea name="message" size="50" class ="form-control"></textarea><br><br>
+                <input type="submit" name="submit" value="Envoyer" class ="btn">
                 <input type="reset" value="Reset" class ="btn">
             </form>
         </div>
