@@ -1,4 +1,5 @@
-<div class="container">
+<h1>Connexion</h1>
+
     <form method="post">
         <div class="form-group" >
             <label>Votre identifiant</label>
@@ -11,5 +12,5 @@
         <div class="form-group">
             <button type="submit" name="submit" class="btn">Valider</button>
         </div>
+        <a href="index.php?controller=forgotPass">Mot de passe oublié ?</a>
     </form>
-</div>

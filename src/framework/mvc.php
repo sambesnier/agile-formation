@@ -70,6 +70,23 @@ function autoloader($className){
     }
 }
 
+function serializeUser(array $infos) {
+    $user = [
+        'nom' => $infos['nom'],
+        'prenom' => $infos['prenom'],
+        'email' => $infos['email'],
+        'role' =>  $infos['role']
+    ];
+
+    $_SESSION['user'] = $user;
+}
+
+function logoutUser() {
+    unset($_SESSION['user']);
+    header('Location: index.php?controller=accueil');
+    exit();
+}
+
 /**
  * Retourne l'utilisateur authentifié
  * @return User

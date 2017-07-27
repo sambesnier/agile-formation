@@ -17,7 +17,7 @@ require ROOT_PATH.'/src/config/config.php';
 if(isset($_GET["controller"])){
     $controllerName = $_GET["controller"];
 } else {
-    $controllerName = "computerHome";
+    $controllerName = "accueil";
 }
 
 

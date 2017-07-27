@@ -27,6 +27,11 @@ if ($isSubmitted) {
     $ville = filter_input(INPUT_POST, 'ville', FILTER_SANITIZE_STRING);
     $codePostal = filter_input(INPUT_POST, 'codepostal', FILTER_SANITIZE_STRING);
     $pays = filter_input(INPUT_POST, 'pays', FILTER_SANITIZE_STRING);
+    $newsletter = filter_has_var(INPUT_POST, 'newsletter');
+    $captcha = $_POST['g-recaptcha-response'];
+
+    var_dump($_POST);
+
     if (empty($nom)) {
         $errors[] = "Vous devez saisir un nom";
     }
@@ -60,12 +65,39 @@ if ($isSubmitted) {
     if (empty($pays)) {
         $errors[] = "Vous devez saisir un pays";
     }
+    if (empty($captcha)) {
+        $errors[] = "Vous devez valider le captcha";
+    }
+
+    // Vérification par google
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = array('secret' => '6LctZyoUAAAAADrE8_XBHp9h0o5Vmb1cN6NflioS', 'response' => $captcha);
+
+    $options = array(
+        'http' => array(
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        )
+    );
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    if ($result === FALSE) { /* Handle error */ }
+
+    $rs = json_decode($result, true);
+
+    if (!$rs['success']) {
+        $errors[] = "Vous n'avez pas été validé par Google";
+    }
+
     if (empty($errors)) {
 
         $pdo->beginTransaction();
-        $sql = $pdo->prepare("INSERT INTO users (nom, prenom, email, password, telephone, sexe, role) VALUES (:nom, :prenom, :email, :password, :telephone, :sexe, :role)");
+        $sql = $pdo->prepare("INSERT INTO users (nom, prenom, email, password, telephone, sexe, role, newsletter) VALUES (:nom, :prenom, :email, :password, :telephone, :sexe, :role, :newsletter)");
         $passcrypt = sha1($password);
         $role = "USER";
+        $non = "N";
+        $oui = "O";
         $sql->bindParam(':nom', $nom);
         $sql->bindParam(':prenom', $prenom);
         $sql->bindParam(':email', $email);
@@ -73,6 +105,12 @@ if ($isSubmitted) {
         $sql->bindParam(':telephone', $telephone);
         $sql->bindParam(':sexe', $sexe);
         $sql->bindParam(':role', $role);
+        if ($newsletter) {
+            $sql->bindParam(':newsletter', $non);
+        } else {
+            $sql->bindParam(':newsletter', $oui);
+        }
+
         try {
             $sql->execute();
             $lastInsertId = $pdo->lastInsertId();
@@ -94,8 +132,8 @@ if ($isSubmitted) {
             $pdo->rollBack();
             $errors[] = "Erreur lors de l'enregistrement de l'adresse";
         }
-        $_SESSION['flash'] = "Vous êtes maintenant inscrit";
-        header('Location: /index.php?controller=computerHome');
+        $_SESSION['flash'] = ["success" => "Vous êtes maintenant inscrit"];
+        header('Location: index.php?controller=accueil');
         exit();
     }
 }
@@ -104,6 +142,7 @@ if ($isSubmitted) {
 renderView(
     'inscription',
     [
-        'pageTitle' => 'Inscription'
+        'pageTitle' => 'Inscription',
+        'errors' => $errors
     ]
 );

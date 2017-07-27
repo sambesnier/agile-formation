@@ -33,26 +33,27 @@ if ($isSubmitted){
         $query->bindParam(':password',$crytedpassword , PDO::PARAM_STR);
         $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
-    }
-    if ($result) {
-        $temp = $result['prenom'] . " " . $result['nom'];
-        $_SESSION['user'] = $temp;
-        $role = $result['role'];
-        if($role == 'ADMIN'){
-            header("Location: /index.php?controller=computerHome");
-            exit();
-        }else{
-            header("Location: /index.php?controller=computerHome");
-            exit();
+
+        if ($result) {
+            serializeUser($result);
+            $role = $result['role'];
+            if($role == 'ADMIN'){
+                header("Location: index.php?controller=adminHome");
+                exit();
+            }else{
+                header("Location: index.php?controller=computerHome");
+                exit();
+            }
+        } else {
+            $_SESSION['flash'] = ["danger" => "Données de connexions invalides"];
         }
-    } else {
-        echo "Données de connexions invalides";
     }
 }
 
 renderView(
     'connexion',
     [
-        'pageTitle' => 'Bienvenue au Cyber Café'
+        'pageTitle' => 'Bienvenue au Cyber Café',
+        'errors' => $errors
     ]
 );
