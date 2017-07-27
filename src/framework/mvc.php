@@ -75,7 +75,11 @@ function serializeUser(array $infos) {
         'nom' => $infos['nom'],
         'prenom' => $infos['prenom'],
         'email' => $infos['email'],
-        'role' =>  $infos['role']
+        'role' =>  $infos['role'],
+        'id_user' => $infos['id_user'],
+        'credit' => $infos['credit'],
+        'telephone' => $infos['telephone'],
+        'newsletter' => $infos['newsletter']
     ];
 
     $_SESSION['user'] = $user;

@@ -41,6 +41,7 @@
                     <li><a href="index.php?controller=adminHome">Admin</a></li>
                     <li><a href="index.php?controller=ajoutArticle">Articles</a></li>
                 <?php endif; ?>
+                <li><a href="index.php?controller=userHome">Espace Client</a></li>
                 <li><a href="index.php?controller=contact">Contact</a></li>
                 <li><a href="index.php?controller=computerHome">Réservation</a></li>
                 <li><a href="index.php?controller=logout">Déconnexion</a></li>
