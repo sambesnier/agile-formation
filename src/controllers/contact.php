@@ -19,7 +19,10 @@ if ($isSubmitted){
         $errors[]="Vous devez saisir le message";
     }
     if (empty($errors)) {
+
         sendMail($email, $nom, $comment);
+        header("Location: index.php?controller=accueil");
+        exit();
     }
 
 }
