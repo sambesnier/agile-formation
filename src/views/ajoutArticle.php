@@ -1,3 +1,4 @@
+<h1>Ajout article</h1>
 <div>
     <form method="post">
         <label>Titre</label>
