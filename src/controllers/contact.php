@@ -36,9 +36,9 @@ renderView(
 
 function sendMail($email, $nom, $comment) {
     $objet='Contact '.$nom;
-    $votremail = 'contact@agile-mail.lan';
-    $headers='From:'.$votremail."\r\n".'To:'.$email."\r\n".'Subject:'.$objet."\r\n".'Content-type:text/plain;charset=utf-8'."\r\n".'Sent:'.date('l, F d, Y H:i');
-    if(mail($email,$objet,$comment,$headers))
+    $contact = 'contact@agile-mail.lan';
+    $headers='From:'.$email."\r\n".'To:'.$contact."\r\n".'Subject:'.$objet."\r\n".'Content-type:text/plain;charset=utf-8'."\r\n".'Sent:'.date('l, F d, Y H:i');
+    if(mail($contact,$objet,$comment,$headers))
     {
         $_SESSION['flash'] = ["success" => "Votre commentaire a bien été envoyé"];
     }

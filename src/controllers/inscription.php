@@ -30,8 +30,6 @@ if ($isSubmitted) {
     $newsletter = filter_has_var(INPUT_POST, 'newsletter');
     $captcha = $_POST['g-recaptcha-response'];
 
-    var_dump($_POST);
-
     if (empty($nom)) {
         $errors[] = "Vous devez saisir un nom";
     }
