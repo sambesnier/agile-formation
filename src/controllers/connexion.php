@@ -41,7 +41,7 @@ if ($isSubmitted){
                 header("Location: index.php?controller=adminHome");
                 exit();
             }else{
-                header("Location: index.php?controller=computerHome");
+                header("Location: index.php?controller=acceuil");
                 exit();
             }
         } else {
