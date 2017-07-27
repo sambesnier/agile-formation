@@ -10,6 +10,7 @@
             <div id="collapse1" class="panel-collapse collapse in">
                 <div class="panel-body">
                         <div class="list-group">
+                            <?php $counter = 0; ?>
                             <?php foreach ($listPC as $item): ?>
                                 <?php if ($item['libre'] == 0){
                                     $color = "green";
@@ -20,12 +21,28 @@
                                 }
 
                                 ?>
-
-                                <a href="index.php?controller=gestionPC&id=<?=$item['id_pc']?>" class="list-group-item <?=$state?>">
-                                    <h3 class="list-group-item-heading"><?= $item["nom"] ?></h3>
-                                    <span class="glyphicon glyphicon-object-align-bottom" style="color: <?=$color?>"></span>
-
-                                </a>
+                                <?php if ($counter == 0) : ?>
+                                    <div class="row" style="margin-bottom: 10px;">
+                                <?php endif; ?>
+                                    <div class="col-md-4">
+                                        <a href="index.php?controller=reservation&id=<?=$item['id_pc']?>" class="list-group-item <?=$state?>">
+                                            <h3 class="list-group-item-heading"><?= $item["nom"] ?></h3>
+                                            <i class="material-icons" style="font-size:48px; color: <?=$color?>">laptop_windows</i>
+                                            <?php if ($color=="red"):?>
+                                                <p>Fin à <?=$listDate[$item['id_pc']] ?></p>
+                                            <?php else :?>
+                                                <p>Libre</p>
+                                            <?php endif ?>
+                                        </a>
+                                    </div>
+                                    <?php $counter++; ?>
+                                    <?php if ($counter > 2) {
+                                        $counter = 0;
+                                    }
+                                    ?>
+                                <?php if ($counter == 0) : ?>
+                                    </div>
+                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </div>
                 </div>

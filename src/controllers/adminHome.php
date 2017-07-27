@@ -22,6 +22,26 @@ $listPC = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 $sql = 'SELECT * FROM users ORDER BY nom';
 $users = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
+$sql = 'SELECT * FROM reservations';
+$listReserv = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+$listDate = [];
+foreach ($listReserv as $item){
+    if (time() > strtotime($item['fin'])){
+        $id_PC = $item['id_pc'];
+        $sql = 'UPDATE pcs SET libre=0 WHERE id_pc=:id_pc';
+        $param['id_pc'] = $id_PC;
+        $stm = $pdo->prepare($sql);
+        $stm->execute($param);
+
+        $sql = 'DELETE FROM reservations WHERE id_pc=:id_pc';
+        $stm = $pdo->prepare($sql);
+        $stm->execute($param);
+    }
+    $date = explode(" ",$item['fin']);
+    $listDate[$item['id_pc']] = $date[1];
+}
+
 $isSubmitted = filter_has_var(INPUT_POST, 'submit');
 if ($isSubmitted) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -56,6 +76,7 @@ renderView(
         'pageTitle' => 'Administration',
         'errors' => $errors,
         'users' => $users,
-        'listPC' => $listPC
+        'listPC' => $listPC,
+        'listDate' => $listDate
     ]
 );
