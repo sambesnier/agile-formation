@@ -28,5 +28,16 @@
             </div>
 
         </div>
+    </div>
+    <div class="row">
+        <h1>Derniers articles</h1>
 
+        <?php foreach ($articles as $article) : ?>
+        <div class="well">
+            <h3><?= $article['titre'] ?></h3>
+            <p><?= $article['texte'] ?></p>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
 
