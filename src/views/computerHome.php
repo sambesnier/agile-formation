@@ -5,20 +5,21 @@
     <div class="well">
 
         <div class="row">
-            <?php for ($j = 1; $j < count($listPC); $j++) : ?>
+            <?php for ($j = 0; $j < count($listPC); $j++) : ?>
             <div class="col-md-1">
                 <div class="head-pc">
-                    <h3>PC<?= $j ?></h3>
+                    <h3>PC<?= $j+1 ?></h3>
                     <i class="material-icons" style="font-size:48px;">laptop_windows</i>
                 </div>
                 <form method="post">
-                <?php for ($i = 0; $i < 39; $i++) : ?>
-                    <?php $checked = empty($heures[$i]['checked'])?"":"checked"; ?>
-                    <?php $class = empty($heures[$i]['checked'])?"libre":"occupe"; ?>
-                    <?php $alreadyChecked =  !empty($heures[$i]['checked'])?"":"name=\"heure-$i\""; ?>
-                    <div class="heure <?= $class ?>"><?= $heures[$i]['debut'] ?><input <?= $alreadyChecked ?> type="checkbox" <?= $checked ?>></div>
+                <?php for ($i = 0; $i < 40; $i++) : ?>
+                    <?php $checked = empty($listPC[$j]['heures'][$i]['checked'])?"":"checked"; ?>
+                    <?php $status = empty($listPC[$j]['heures'][$i]['disabled'])?"":"disabled"; ?>
+                    <?php $class = empty($listPC[$j]['heures'][$i]['checked'])?"libre":"occupe"; ?>
+                    <?php $alreadyChecked =  !empty($listPC[$j]['heures'][$i]['checked'])?"":"name=\"heure-$i\""; ?>
+                    <div class="heure <?= $class ?> <?= $status ?>"><?= $listPC[$j]['heures'][$i]['debut'] ?><input <?= $alreadyChecked ?> type="checkbox" <?= $checked ?>></div>
                 <?php endfor; ?>
-                <button type="submit" name="submit-<?= $j ?>" class="btn btn-primary">OK</button>
+                <button type="submit" name="submit-<?= $j+1 ?>" class="btn btn-primary">OK</button>
                 </form>
             </div>
             <?php endfor; ?>
@@ -36,7 +37,7 @@
     }
 
     .occupe {
-        background-color: red!important;
+        background-color: indianred!important;
     }
 
     .libre {

@@ -234,34 +234,38 @@ function getCorrespondanceHeures() {
             'fin' => '18:45'
         ],
         'heure-31' => [
+            'debut' => '18:45',
+            'fin' => '19:00'
+        ],
+        'heure-32' => [
             'debut' => '19:00',
             'fin' => '19:15'
         ],
-        'heure-32' => [
+        'heure-33' => [
             'debut' => '19:15',
             'fin' => '19:30'
         ],
-        'heure-33' => [
+        'heure-34' => [
             'debut' => '19:30',
             'fin' => '19:45'
         ],
-        'heure-34' => [
+        'heure-35' => [
             'debut' => '19:45',
             'fin' => '20:00'
         ],
-        'heure-35' => [
+        'heure-36' => [
             'debut' => '20:00',
             'fin' => '20:15'
         ],
-        'heure-36' => [
+        'heure-37' => [
             'debut' => '20:15',
             'fin' => '20:30'
         ],
-        'heure-37' => [
+        'heure-38' => [
             'debut' => '20:30',
             'fin' => '20:45'
         ],
-        'heure-38' => [
+        'heure-39' => [
             'debut' => '20:45',
             'fin' => '21:00'
         ],

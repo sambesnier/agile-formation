@@ -22,14 +22,16 @@ $(document).ready(function () {
     });
 
     $(".heure").on('click', '', function () {
-        var checkbox = $(this).find("input");
+        if(!$(this).hasClass('disabled')) {
+            var checkbox = $(this).find("input");
 
-        if($(this).hasClass('selected')) {
-            $(this).removeClass('selected');
-        } else {
-            $(this).addClass('selected');
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                $(this).addClass('selected');
+            }
+
+            checkbox.attr('checked', !checkbox.attr("checked"));
         }
-
-        checkbox.attr('checked', !checkbox.attr("checked"));
     })
 });
