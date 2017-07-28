@@ -18,6 +18,39 @@
 </form>
 
 <br>
+
+<h2>Vos réservations</h2>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>N° Réservation</th>
+                        <th>Heure début</th>
+                        <th>Heure fin</th>
+                        <th>Action</th>
+                    </tr>
+                    <?php foreach ($listReserv as $reserv): ?>
+                        <tr class="lines">
+                            <td><?= $reserv['id_resa'] ?></td>
+                            <td><?= $reserv['debut'] ?></td>
+                            <td><?= $reserv['fin'] ?></td>
+                            <td>
+                                <a href="index.php?controller=userHome&id=<?=$reserv['id_resa']?>" class="list-group-item btn-danger">
+                                    Annuler
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+<br>
 <h2>Votre crédit</h2>
 <form>
     <div class="form-group">

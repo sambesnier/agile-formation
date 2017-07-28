@@ -13,7 +13,7 @@
                 $state = "disabled";
             }
 
-        ?>
+?>
 
             <?php if ($counter == 0) : ?>
                 <div class="row" style="margin-bottom: 10px;">

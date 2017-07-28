@@ -42,7 +42,7 @@ if ($isSubmitted){
 
         $sql = 'INSERT INTO reservations (debut, fin, id_pc, id_user) VALUES (?,?,?,?)';
         $stm = $connexion->prepare($sql);
-        $stm->execute([$actualDate->format('Y-m-d H:i:s'),$endDate->format('Y-m-d H:i:s'),$id_pc,$id_user]);
+        $stm->execute([$actualDate->format('Y-m-d H:i'),$endDate->format('Y-m-d H:i'),$id_pc,$id_user]);
 
         $sql = 'UPDATE users SET credit=:credit WHERE id_user=:id_user';
         $params['id_user'] = $id_user;
