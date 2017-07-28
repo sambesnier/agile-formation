@@ -10,7 +10,7 @@
     </div>
     <div class="form-group">
         <label for="endTime">Heure de fin</label>
-        <input type="time" class="form-control" name="endTime" step="3600" value=<?=$time?> min="<?=$time?>" max="<?=$maxTime?>">
+        <input type="time" class="form-control" name="endTime" step="900" value=<?=$time?> min="<?=$time?>" max="<?=$maxTime?>">
     </div>
 
     <h3>Vous avez un crédit de <?=$credit?> €</h3>

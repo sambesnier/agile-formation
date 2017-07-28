@@ -73,14 +73,15 @@ if ($isSubmitted) {
 
     $options = array(
         'http' => array(
-            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method'  => 'POST',
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
             'content' => http_build_query($data)
         )
     );
-    $context  = stream_context_create($options);
+    $context = stream_context_create($options);
     $result = file_get_contents($url, false, $context);
-    if ($result === FALSE) { /* Handle error */ }
+    if ($result === FALSE) { /* Handle error */
+    }
 
     $rs = json_decode($result, true);
 
@@ -89,52 +90,73 @@ if ($isSubmitted) {
     }
 
     if (empty($errors)) {
-
-        $pdo->beginTransaction();
-        $sql = $pdo->prepare("INSERT INTO users (nom, prenom, email, password, telephone, sexe, role, newsletter) VALUES (:nom, :prenom, :email, :password, :telephone, :sexe, :role, :newsletter)");
-        $passcrypt = sha1($password);
-        $role = "USER";
-        $non = "N";
-        $oui = "O";
-        $sql->bindParam(':nom', $nom);
-        $sql->bindParam(':prenom', $prenom);
+        //verification de l'existence de l'email dans la base
+        $sql = $pdo->prepare("select nom from users where email=:email");
         $sql->bindParam(':email', $email);
-        $sql->bindParam(':password', $passcrypt);
-        $sql->bindParam(':telephone', $telephone);
-        $sql->bindParam(':sexe', $sexe);
-        $sql->bindParam(':role', $role);
-        if ($newsletter) {
-            $sql->bindParam(':newsletter', $non);
-        } else {
-            $sql->bindParam(':newsletter', $oui);
-        }
 
         try {
             $sql->execute();
-            $lastInsertId = $pdo->lastInsertId();
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            $errors[] = "Erreur lors de l'enregistrement de l'utilisateur";
-        }
-        $sql = $pdo->prepare("INSERT INTO adresses (numero, voie, ville, cp, pays, id_user) VALUES (:numero, :voie, :ville, :cp, :pays, :id_user)");
-        $sql->bindParam(':numero', $numero);
-        $sql->bindParam(':voie', $voie);
-        $sql->bindParam(':ville', $ville);
-        $sql->bindParam(':cp', $codePostal);
-        $sql->bindParam(':pays', $pays);
-        $sql->bindParam(':id_user', $lastInsertId);
-        try {
-            $sql->execute();
-            $pdo->commit();
+            $rs = $sql->fetch(PDO::FETCH_ASSOC);
+            if (!$rs) { //si l'email n'est pas en base on l'insert
+                $pdo->beginTransaction();
+                $sql = $pdo->prepare("INSERT INTO users (nom, prenom, email, password,
+                                               telephone, sexe, role, newsletter)
+                                              VALUES (:nom, :prenom, :email, :password,
+                                               :telephone, :sexe, :role, :newsletter)");
+                $passcrypt = sha1($password);
+                $role = "USER";
+                $non = "N";
+                $oui = "O";
+                $sql->bindParam(':nom', $nom);
+                $sql->bindParam(':prenom', $prenom);
+                $sql->bindParam(':email', $email);
+                $sql->bindParam(':password', $passcrypt);
+                $sql->bindParam(':telephone', $telephone);
+                $sql->bindParam(':sexe', $sexe);
+                $sql->bindParam(':role', $role);
+                if ($newsletter) {
+                    $sql->bindParam(':newsletter', $non);
+                } else {
+                    $sql->bindParam(':newsletter', $oui);
+                }
+
+                try {
+                    $sql->execute();
+                    $lastInsertId = $pdo->lastInsertId();
+                } catch (PDOException $e) {
+                    $pdo->rollBack();
+                    $errors[] = "Erreur lors de l'enregistrement de l'utilisateur";
+                }
+                $sql = $pdo->prepare("INSERT INTO adresses (numero, voie, ville, cp, pays, id_user) VALUES (:numero, :voie, :ville, :cp, :pays, :id_user)");
+                $sql->bindParam(':numero', $numero);
+                $sql->bindParam(':voie', $voie);
+                $sql->bindParam(':ville', $ville);
+                $sql->bindParam(':cp', $codePostal);
+                $sql->bindParam(':pays', $pays);
+                $sql->bindParam(':id_user', $lastInsertId);
+                try {
+                    $sql->execute();
+                    $pdo->commit();
+                } catch (PDOException $e) {
+                    $pdo->rollBack();
+                    $errors[] = "Erreur lors de l'enregistrement de l'adresse";
+                }
+                $_SESSION['flash'] = ["success" => "Vous êtes maintenant inscrit"];
+                header('Location: index.php?controller=accueil');
+                exit();
+            } else {// message flash pour user deja enregistré
+                $_SESSION['flash']=['info'=>'Vous êtes déjà enregistré(e)'];
+
+            }
 
         } catch (PDOException $e) {
-            $pdo->rollBack();
-            $errors[] = "Erreur lors de l'enregistrement de l'adresse";
+            $errors[] = "Erreur de requête SQL";
         }
 
         //Envoi du mail de confirmation
         $url = 'http://192.168.18.106/agile/web/index.php?controller=confirmInscription&email='.$email;
         sendMailConfirm($email, $url);
+
 
     }
 }

@@ -43,7 +43,7 @@ if ($isSubmitted){
                     exit();
                 }else{
 
-                    header("Location: index.php?controller=accueil");
+                header("Location: index.php?controller=accueil");
 
                     exit();
                 }
