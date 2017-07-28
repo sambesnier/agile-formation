@@ -20,4 +20,16 @@ $(document).ready(function () {
 
         $("#emailCredit-hidden").val(email.html());
     });
+
+    $(".heure").on('click', '', function () {
+        var checkbox = $(this).find("input");
+
+        if($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        } else {
+            $(this).addClass('selected');
+        }
+
+        checkbox.attr('checked', !checkbox.attr("checked"));
+    })
 });

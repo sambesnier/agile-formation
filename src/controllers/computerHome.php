@@ -21,52 +21,53 @@ $heures = getCorrespondanceHeures();
 
 $heuresView = array_values($heures);
 
-foreach ($listReserv as $item){
-    /*if (time() > strtotime($item['fin'])){
-        $id_PC = $item['id_pc'];
-        $sql = 'UPDATE pcs SET libre=0 WHERE id_pc=:id_pc';
-        $param['id_pc'] = $id_PC;
-        $stm = $connexion->prepare($sql);
-        $stm->execute($param);
+$heuresViewArray;
 
-        $sql = 'DELETE FROM reservations WHERE id_pc=:id_pc';
-        $stm = $connexion->prepare($sql);
-        $stm->execute($param);
-    }
-    $date = explode(" ",$item['fin']);
-    $listDate[$item['id_pc']] = $date[1];*/
+for ($k = 1; $k <= count($listPC); $k++) {
 
-    for ($i = 0; $i < count($heuresView); $i++) {
-        $debutHeures = strtotime($heuresView[$i]['debut'])+2*3600;
-        $debutHeures = new DateTime("@$debutHeures");
+    foreach ($listReserv as $item) {
 
-        $debutItem = strtotime($item['debut'])+2*3600;
-        $debutItem = new DateTime("@$debutItem");
+        for ($i = 0; $i < count($heuresView); $i++) {
+            if ($item['id_pc'] == $k) {
+                $debutHeures = strtotime($heuresView[$i]['debut']) + 2 * 3600;
+                $debutHeures = new DateTime("@$debutHeures");
 
-        $finHeures = strtotime($heuresView[$i]['fin'])+2*3600;
-        $finHeures = new DateTime("@$finHeures");
+                $debutItem = strtotime($item['debut']) + 2 * 3600;
+                $debutItem = new DateTime("@$debutItem");
 
-        $finItem = strtotime($item['fin'])+2*3600;
-        $finItem = new DateTime("@$finItem");
+                $finHeures = strtotime($heuresView[$i]['fin']) + 2 * 3600;
+                $finHeures = new DateTime("@$finHeures");
 
-        $indiceDebut;
-        if ($debutItem == $debutHeures) {
-            $heuresView[$i]['checked'] = "checked";
-            $indiceDebut = $i;
-        }
-        if ($finItem == $finHeures) {
-            $heuresView[$i]['checked'] = "checked";
-            for ($j = $i; $j > $indiceDebut; $j--) {
-                $heuresView[$j]['checked'] = "checked";
+                $finItem = strtotime($item['fin']) + 2 * 3600;
+                $finItem = new DateTime("@$finItem");
+
+                $indiceDebut;
+                if ($debutItem == $debutHeures) {
+                    $heuresView[$i]['checked'] = "checked";
+                    $indiceDebut = $i;
+                }
+                if ($finItem == $finHeures) {
+                    $heuresView[$i]['checked'] = "checked";
+                    for ($j = $i; $j > $indiceDebut; $j--) {
+                        $heuresView[$j]['checked'] = "checked";
+                    }
+                }
             }
         }
-    }
 
+    }
 }
 
-$isSubmitted = filter_has_var(INPUT_POST, 'submit-1');
+$indiceSubmit = 0;
+for ($i = 1; $i <= 10; $i++) {
+    $isSubmitted = filter_has_var(INPUT_POST, 'submit-'.$i);
+    if ($isSubmitted) {
+        $indiceSubmit = $i;
+    }
+}
 
-if ($isSubmitted) {
+
+if ($indiceSubmit != 0) {
     $minutes = array_keys($_POST);
     //var_dump($minutes[0]);
     //var_dump($minutes[count($minutes)-2]);
@@ -78,7 +79,7 @@ if ($isSubmitted) {
 
     $sql = 'INSERT INTO reservations (debut, fin, id_pc, id_user) VALUES (?,?,?,?)';
     $stm = $connexion->prepare($sql);
-    $stm->execute([$debutDatetime->format('Y-m-d H:i:s'),$finDatetime->format('Y-m-d H:i:s'),1,$id_user]);
+    $stm->execute([$debutDatetime->format('Y-m-d H:i:s'),$finDatetime->format('Y-m-d H:i:s'),$indiceSubmit,$id_user]);
 
     $_SESSION['flash'] = ['success' => 'Votre réservation à été validée'];
 

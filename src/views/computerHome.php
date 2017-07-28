@@ -3,34 +3,26 @@
 <ul class="list-group">
 
     <div class="well">
-        <table class="table">
-            <tr>
-                <form method="post">
-                <td>
-                    <h3>PC1</h3>
+
+        <div class="row">
+            <?php for ($j = 1; $j < count($listPC); $j++) : ?>
+            <div class="col-md-1">
+                <div class="head-pc">
+                    <h3>PC<?= $j ?></h3>
                     <i class="material-icons" style="font-size:48px;">laptop_windows</i>
-                </td>
-                    <?php for ($i = 0; $i < 12; $i++) : ?>
-                        <?php $checked = empty($heures[$i]['checked'])?"":"checked"; ?>
-                        <?php $class = empty($heures[$i]['checked'])?"class=\"libre\"":"class=\"occupe\""; ?>
-                        <?php $alreadyChecked =  !empty($heures[$i]['checked'])?"":"name=\"heure-$i\""; ?>
-                        <td <?= $class ?>><input <?= $alreadyChecked ?> type="checkbox" <?= $checked ?>></td>
-                    <?php endfor; ?>
-
-                <td class="midi">X</td>
-                <td class="midi">X</td>
-
-                    <?php for ($i = 12; $i < 39; $i++) : ?>
-                        <?php $checked = empty($heures[$i]['checked'])?"":"checked"; ?>
-                        <?php $class = empty($heures[$i]['checked'])?"class=\"libre\"":"class=\"occupe\""; ?>
-                        <?php $alreadyChecked =  !empty($heures[$i]['checked'])?"":"name=\"heure-$i\""; ?>
-                        <td <?= $class ?>><input <?= $alreadyChecked ?> type="checkbox" <?= $checked ?>></td>
-                    <?php endfor; ?>
-
-                <td><button type="submit" name="submit-1" class="btn btn-primary">Réservation</button></td>
+                </div>
+                <form method="post">
+                <?php for ($i = 0; $i < 39; $i++) : ?>
+                    <?php $checked = empty($heures[$i]['checked'])?"":"checked"; ?>
+                    <?php $class = empty($heures[$i]['checked'])?"libre":"occupe"; ?>
+                    <?php $alreadyChecked =  !empty($heures[$i]['checked'])?"":"name=\"heure-$i\""; ?>
+                    <div class="heure <?= $class ?>"><?= $heures[$i]['debut'] ?><input <?= $alreadyChecked ?> type="checkbox" <?= $checked ?>></div>
+                <?php endfor; ?>
+                <button type="submit" name="submit-<?= $j ?>" class="btn btn-primary">OK</button>
                 </form>
-            </tr>
-        </table>
+            </div>
+            <?php endfor; ?>
+        </div>
     </div>
 
 </ul>
@@ -44,11 +36,41 @@
     }
 
     .occupe {
-        background-color: red;
+        background-color: red!important;
     }
 
     .libre {
-        background-color: green;
+        background-color: lightblue;
+    }
+
+    .selected {
+        background-color: lightgreen!important;
+    }
+
+    .heure {
+        margin-bottom: 5px;
+        background-color: lightblue;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .heure:hover {
+        box-shadow: 0px 0px 5px black;
+    }
+
+    .head-pc {
+        margin: auto;
+        width: 80%;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    input {
+        display: none;
     }
 
     .midi {
