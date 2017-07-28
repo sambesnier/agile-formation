@@ -35,17 +35,22 @@ if ($isSubmitted){
         $result = $query->fetch(PDO::FETCH_ASSOC);
 
         if ($result) {
-            serializeUser($result);
-            $role = $result['role'];
-            if($role == 'ADMIN'){
-                header("Location: index.php?controller=adminHome");
-                exit();
-            }else{
+            if ($result['confirm'] == 'O'){
+                serializeUser($result);
+                $role = $result['role'];
+                if($role == 'ADMIN'){
+                    header("Location: index.php?controller=adminHome");
+                    exit();
+                }else{
 
                 header("Location: index.php?controller=accueil");
 
-                exit();
+                    exit();
+                }
+            } else {
+                $_SESSION['flash'] = ["danger" => "Vous n'avez pas encore validé votre inscription"];
             }
+
         } else {
             $_SESSION['flash'] = ["danger" => "Données de connexions invalides"];
         }
