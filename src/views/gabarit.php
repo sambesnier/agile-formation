@@ -13,51 +13,7 @@
 
 <body class="container-fluid">
 
-<!-- navigation principale-->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" >Cyber Café</a>
-        </div>
 
-        <!-- collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-
-                <li><a href="index.php?controller=accueil">Accueil</a></li>
-
-            </ul>
-
-            <?php if (!empty($_SESSION['user'])) : ?>
-            <ul class="nav navbar-nav navbar-right">
-                <?php if (!empty($_SESSION['user']) && $_SESSION['user']['role'] == "ADMIN") : ?>
-                    <li><a href="index.php?controller=adminHome">Admin</a></li>
-                    <li><a href="index.php?controller=ajoutArticle">Articles</a></li>
-                <?php endif; ?>
-                <li><a href="index.php?controller=userHome">Espace Client</a></li>
-                <li><a href="index.php?controller=contact">Contact</a></li>
-                <li><a href="index.php?controller=computerHome">Réservation</a></li>
-                <li><a href="index.php?controller=logout">Déconnexion</a></li>
-            </ul>
-            <?php endif; ?>
-            <?php if (empty($_SESSION['user'])) : ?>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="index.php?controller=contact">Contact</a></li>
-                    <li><a href="index.php?controller=inscription">Inscription</a></li>
-                    <li><a href="index.php?controller=connexion">Connexion</a></li>
-                </ul>
-            <?php endif; ?>
-
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
 
 <!--contenu de l'application-->
 <section class="row">
