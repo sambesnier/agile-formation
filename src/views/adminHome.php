@@ -30,10 +30,14 @@
                                             <i class="material-icons" style="font-size:48px; color: <?=$color?>">laptop_windows</i>
                                             <?php if ($color=="red"):?>
                                                 <p>Fin à <?=$listDate[$item['id_pc']] ?></p>
+                                        </a>
+                                        <button type="submit" name="annulation">annuler reservation</button>
                                             <?php else :?>
                                                 <p>Libre</p>
-                                            <?php endif ?>
                                         </a>
+                                            <?php endif ?>
+
+
                                     </div>
                                     <?php $counter++; ?>
                                     <?php if ($counter > 2) {
